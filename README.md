@@ -36,3 +36,18 @@ The preferred way to configure the miner is the [JSON config file](https://xmrig
 * support@xmrig.com
 * [reddit](https://www.reddit.com/user/XMRig/)
 * [twitter](https://twitter.com/xmrig_dev)
+
+## 如何编译
+1. 安装依赖 
+brew install cmake libuv openssl hwloc
+xcode-select --install
+2. 创建build目录 
+rm -rf build
+mkdir build
+cd build
+3. cmake
+cmake .. -DOPENSSL_ROOT_DIR=$(brew --prefix openssl)
+4. 编译
+make -j$(sysctl -n hw.logicalcpu)
+5. 验证
+./xmrig --version
