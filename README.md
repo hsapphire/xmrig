@@ -51,3 +51,45 @@ cmake .. -DOPENSSL_ROOT_DIR=$(brew --prefix openssl)
 make -j$(sysctl -n hw.logicalcpu)
 5. 验证
 ./xmrig --version
+
+## windows下编译 
+1. 下载依赖 
+https://github.com/xmrig/xmrig-deps/archive/refs/tags/v25.06.16.zip
+2. power shwell执行 
+cmake --help | Select-String "Visual Studio"
+3. 创建build目录 , 执行如下(把下载的xmrig-deps放到对应的目录)
+cmake .. -G "Visual Studio 18 2026" -A x64 -DXMRIG_DEPS=c:\xmrig-deps\msvc2022\x64
+4. 成功后再编译
+cmake --build . --config Release
+5. 生成 文件
+build\Release\xmrig.exe
+
+# windows调优
+## 调优
+根据benchmark来调优
+https://xmrig.com/benchmark?cpu=Intel%28R%29+Xeon%28R%29+CPU+E5-2696+v3+%40+2.30GHz
+### e5优化
+   单cpu可以达9.3kh/s 但是目前开启不了turbo.当前是5.6kh/s
+1. 要以管理员运行,不然msr无法打开
+2. 开始turbo ,有的华南主板是阉割的, 不能开启.
+3. 电源开启高性能
+   查看电源计划: powercfg /getactivescheme
+   如果不是高性能则设置为高性能: powercfg /setactive SCHEME_MIN
+4. 测试 .\xmrig.exe --bench=10M
+## linux编译 
+1. 下载依赖
+apt update
+
+apt install -y \
+    git \
+    build-essential \
+    cmake \
+    libuv1-dev \
+    libssl-dev \
+    libhwloc-dev
+
+2. 编译
+mkdir build
+cd build
+cmake ..
+make -j$(nproc)
